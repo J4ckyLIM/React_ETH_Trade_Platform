@@ -3,12 +3,17 @@ import {
   Box,
   theme,
 } from "@chakra-ui/react"
-import { MainLayout } from "./components/layouts/MainLayout/MainLayout"
+import { Suspense } from "react";
+import { useRoutes } from "react-router-dom";
+import { routes } from "./router";
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <MainLayout>{'hello'}</MainLayout>
-    </Box>
-  </ChakraProvider>
-)
+export const App = () => {
+  const elements = useRoutes(routes);
+  return (
+    <ChakraProvider theme={theme}>
+      <Box textAlign="center" fontSize="xl">
+        <Suspense>{elements}</Suspense>
+      </Box>
+    </ChakraProvider>
+  )
+}
