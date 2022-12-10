@@ -1,5 +1,5 @@
 import { BaseService } from "./BaseService";
-import { App } from "../../config/firebase/admin";
+import { App } from "../config/firebase/admin";
 import { UserRecord } from "firebase-admin/lib/auth/user-record";
 
 export class UserService extends BaseService {

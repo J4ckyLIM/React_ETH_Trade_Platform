@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import { App } from "../../config/firebase/admin";
+import { App } from "../config/firebase/admin";
 import { IRequest } from "../type/type";
 
 interface AuthTokenArgs {

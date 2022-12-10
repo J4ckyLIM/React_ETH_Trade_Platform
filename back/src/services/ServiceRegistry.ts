@@ -1,4 +1,4 @@
-import { App } from "../../config/firebase/admin";
+import { App } from "../config/firebase/admin";
 import { UserService } from "./UserService";
 
 export class ServiceRegistry {

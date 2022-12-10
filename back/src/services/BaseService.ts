@@ -1,4 +1,4 @@
-import { App } from "../../config/firebase/admin";
+import { App } from "../config/firebase/admin";
 
 export abstract class BaseService {
   protected app;
