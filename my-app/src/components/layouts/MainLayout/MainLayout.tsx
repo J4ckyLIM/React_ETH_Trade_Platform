@@ -1,6 +1,7 @@
 import { useDisclosure, useColorModeValue, Drawer, DrawerContent, Box } from "@chakra-ui/react";
-import { ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings } from "react-icons/fi";
+import { Outlet } from "react-router-dom";
 import { LinkItemProps, SidebarContent } from "../Navigation/SideBarContent";
 
 const LinkItems: Array<LinkItemProps> = [
@@ -11,7 +12,11 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Settings', icon: FiSettings },
 ];
 
-export const MainLayout = ({ children }: { children: ReactNode }) => {
+interface MainLayoutProps {
+  children?: ReactNode;
+}
+
+export const MainLayout: FC<MainLayoutProps> = () => {
   const { isOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -33,7 +38,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
         </DrawerContent>
       </Drawer>
       <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
+        <Outlet />
       </Box>
     </Box>
   );
