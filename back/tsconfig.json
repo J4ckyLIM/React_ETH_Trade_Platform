@@ -5,6 +5,8 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,                                      
-  }
+    "strict": true,   
+    "resolveJsonModule": true,                              
+  },
+  "include": ["src/**/*.json"],
 }
