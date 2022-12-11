@@ -1,9 +1,12 @@
 import * as express from "express";
+import * as cors from 'cors';
 import { ServiceRegistry } from "../services";
 import { UserController } from "./controllers";
 
 export const startServer = async (serviceRegistry: ServiceRegistry) => {
   const app = express();
+
+  app.use(cors());
 
   app.use(express.json());
 
