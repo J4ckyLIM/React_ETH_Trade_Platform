@@ -1,6 +1,7 @@
 import { RouteObject } from 'react-router-dom';
 
 import { MainLayout } from './components/layouts/MainLayout/MainLayout';
+import { AuthenticationView } from './views/authentication/AuthenticationView';
 import { HomeView } from './views/home/HomeView';
 
 export const routes: RouteObject[] = [
@@ -19,4 +20,8 @@ export const routes: RouteObject[] = [
       },
     ],
   },
+  {
+    path: 'authentication',
+    element: <AuthenticationView />,
+  }
 ];
