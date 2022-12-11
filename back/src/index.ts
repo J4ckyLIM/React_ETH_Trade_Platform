@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
-import { ServiceRegistry } from './src/services/ServiceRegistry';
-import firebaseApp from './src/config/firebase/admin';
-import { startServer } from './src/express';
+import { ServiceRegistry } from './services/ServiceRegistry';
+import firebaseApp from './config/firebase/admin';
+import { startServer } from './express';
 
 config();
 
