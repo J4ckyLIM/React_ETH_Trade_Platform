@@ -1,15 +1,13 @@
-import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
+import { config } from 'dotenv';
+import { ServiceRegistry } from './src/services/ServiceRegistry';
+import firebaseApp from './src/config/firebase/admin';
+import { startServer } from './src/express';
 
-dotenv.config();
+config();
 
-const app: Express = express();
-const port = process.env.PORT;
+const main = async () => {
+  const serviceRegistry = new ServiceRegistry(firebaseApp);
+  await startServer(serviceRegistry);
+}
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Express + TypeScript Server');
-});
-
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
-});
+main().catch(console.error);
