@@ -1,18 +1,9 @@
 import { NextFunction, Response } from "express";
-import { App } from "../config/firebase/admin";
-import { IRequest } from "../type/type";
+import firebaseApp, { App } from "../config/firebase/admin";
+import { AuthenticatedRequest } from "../type/type";
 
 interface AuthTokenArgs {
-  // app: App;
-  req: IRequest;
-  // res: Response;
-  next: NextFunction;
-}
-
-interface AuthenticationArgs {
-  app: App;
-  req: IRequest;
-  res: Response;
+  req: AuthenticatedRequest;
   next: NextFunction;
 }
 
@@ -25,7 +16,7 @@ export const getAuthToken = ({ req, next }: AuthTokenArgs) => {
   next();
 }
 
-export const checkIfAuthenticated = ({ app, req, res, next }: AuthenticationArgs) => {
+export const checkIfAuthenticated = (req, res, next) => {
   const nextFunc = async () => {
     try {
       const { authToken } = req;
@@ -34,7 +25,7 @@ export const checkIfAuthenticated = ({ app, req, res, next }: AuthenticationArgs
           .status(401)
           .send({ error: 'You are not authorized to make this request' });
       }
-      const userInfo = await app
+      const userInfo = await firebaseApp
         .auth()
         .verifyIdToken(authToken);
       req.authId = userInfo.uid;

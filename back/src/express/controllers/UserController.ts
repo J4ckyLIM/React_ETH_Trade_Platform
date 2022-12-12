@@ -1,5 +1,7 @@
 import { Router, Response, Request } from "express";
 import { BaseController } from ".";
+import { checkIfAuthenticated } from "../../infrastructure/middleware";
+import { AuthenticatedRequest } from "../../type/type";
 
 
 export class UserController extends BaseController {
@@ -15,7 +17,7 @@ export class UserController extends BaseController {
     }
   }
 
-  async createWallet(req: Request, res: Response) {
+  async createWallet(req: AuthenticatedRequest, res: Response) {
     const { userId } = req.params;
     const { userService } = this.serviceRegistry;
     try {
@@ -29,7 +31,7 @@ export class UserController extends BaseController {
   buildRoutes(): Router {
     const router = Router();
     router.post('/new', this.createUser.bind(this));
-    router.post('/:userId/wallet/new', this.createWallet.bind(this));
+    router.post('/:userId/wallet/new', checkIfAuthenticated, this.createWallet.bind(this));
     return router;
   }
 }
