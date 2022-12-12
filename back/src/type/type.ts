@@ -1,6 +1,6 @@
 import { Request } from 'express';
 
-export interface IRequest extends Request {
+export interface AuthenticatedRequest extends Request {
   authToken: string | null;
   authId?: string;
 }
