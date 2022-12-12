@@ -4,7 +4,7 @@ import { BaseController } from ".";
 
 export class UserController extends BaseController {
 
-  async create(req: Request, res: Response) {
+  async createUser(req: Request, res: Response) {
     const { email, password } = req.body;
     const { userService } = this.serviceRegistry;
     try {
@@ -15,9 +15,21 @@ export class UserController extends BaseController {
     }
   }
 
+  async createWallet(req: Request, res: Response) {
+    const { userId } = req.params;
+    const { userService } = this.serviceRegistry;
+    try {
+      const walletCreated = await userService.createWalletForUser(userId);
+      res.status(201).json({ message: "Wallet created", wallet: walletCreated });
+    } catch (e: any) {
+      res.status(400).json({ error: e.message });
+    }
+  }
+
   buildRoutes(): Router {
     const router = Router();
-    router.post('/new', this.create.bind(this));
+    router.post('/new', this.createUser.bind(this));
+    router.post('/:userId/wallet/new', this.createWallet.bind(this));
     return router;
   }
 }
