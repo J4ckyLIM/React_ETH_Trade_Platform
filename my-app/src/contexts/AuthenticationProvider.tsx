@@ -2,6 +2,7 @@ import { signInWithEmailAndPassword, User, UserCredential, signOut } from "fireb
 import { createContext, useCallback, useEffect, useMemo, useState } from "react"
 
 import { auth } from "../config/firebase/firebase";
+import { useNavigate } from 'react-router-dom';
 
 interface AuthenticationConfig {
   user: User | null;
@@ -24,6 +25,7 @@ export const AuthenticationProvider = ({ children }: { children: any }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userCredentials, setUserCredentials] = useState<UserCredential | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const storeToken = useCallback((token: string) => {
     setToken(token);
@@ -34,8 +36,9 @@ export const AuthenticationProvider = ({ children }: { children: any }) => {
     const credentials = await signInWithEmailAndPassword(firebaseAuth, email, password);
     setUserCredentials(credentials);
     setUser(credentials.user);
+    navigate('/');
     Promise.resolve();
-  }, [firebaseAuth]);
+  }, [firebaseAuth,navigate]);
 
   const getToken = useCallback(async () => {
     const token = await firebaseAuth.currentUser?.getIdToken();
@@ -48,12 +51,29 @@ export const AuthenticationProvider = ({ children }: { children: any }) => {
     await signOut(firebaseAuth);
   }, [firebaseAuth]);
 
+  const getCurrentUser = useCallback(async () => {
+    const user = firebaseAuth.currentUser;
+    if(user) {
+      setUser(user);
+      navigate('/');
+    } else {
+      navigate('/authentication');
+    }
+  }, [firebaseAuth, navigate]);
+
   useEffect(() => {
     const fetchToken = async () => {
       await getToken();
     }
     fetchToken();
   }, [getToken]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      await getCurrentUser();
+    }
+    fetchUser();
+  }, [getCurrentUser])
 
   const contextValues = useMemo(() => {
     return {

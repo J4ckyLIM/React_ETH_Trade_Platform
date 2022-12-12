@@ -4,6 +4,8 @@ import { fetchApi, methods } from './fetchApi';
 export interface CreateUserArgs {
   email: string;
   password: string;
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
 }
 
 const uri = '/users';
@@ -24,9 +26,17 @@ export const useCreateUser = () => {
           password,
         },
       }),
-    onSuccess: () => {
+    onSuccess: (_, { onSuccess }) => {
       queryClient.invalidateQueries([uri]);
+      if(onSuccess) {
+        onSuccess();
+      }
     },
+    onError: (error, { onError }) => {
+      if(onError) {
+        onError(error);
+      }
+    }
   });
 
   return { ...mutation, createUser: mutation.mutate };
