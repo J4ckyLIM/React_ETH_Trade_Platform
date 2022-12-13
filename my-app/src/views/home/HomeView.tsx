@@ -1,7 +1,7 @@
 import { Button, Text, VStack } from "@chakra-ui/react"
-import { FC, useCallback } from "react"
+import { FC, useCallback, useEffect } from "react"
 import { toast } from "react-toastify"
-import { useCreateWallet } from "../../api/users"
+import { useCreateWallet, useGetUserInfo } from "../../api/users"
 import { Page } from "../../components/layouts/Page/Page"
 import { useAuthentication } from "../../hooks"
 import { useWeb3 } from "../../hooks/useWeb3"
@@ -11,6 +11,14 @@ export const HomeView: FC = () => {
   const { createWallet } = useCreateWallet();
   const { user } = useAuthentication();
   const { setWallet } = useWeb3();
+
+  const { userInfo } = useGetUserInfo();
+
+  useEffect(() => {
+    if(userInfo?.wallet) {
+      setWallet(userInfo.wallet);
+    }
+  }, [userInfo, setWallet])
 
   const handleOnSuccessWalletCreation = useCallback((wallet: UserWallet) => {
     setWallet(wallet);

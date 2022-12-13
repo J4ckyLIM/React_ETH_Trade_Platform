@@ -3,6 +3,7 @@ import { createContext, useCallback, useEffect, useMemo, useState } from "react"
 
 import { auth } from "../config/firebase/firebase";
 import { useNavigate } from 'react-router-dom';
+// import { useGetUserInfo } from "../api/users";
 
 interface AuthenticationConfig {
   user: User | null;
@@ -40,13 +41,6 @@ export const AuthenticationProvider = ({ children }: { children: any }) => {
     Promise.resolve();
   }, [firebaseAuth,navigate]);
 
-  const getToken = useCallback(async () => {
-    const token = await firebaseAuth.currentUser?.getIdToken();
-    if(token) {
-      storeToken(token);
-    }
-  }, [firebaseAuth, storeToken]);
-
   const logout = useCallback(async () => {
     await signOut(firebaseAuth);
   }, [firebaseAuth]);
@@ -62,11 +56,15 @@ export const AuthenticationProvider = ({ children }: { children: any }) => {
   }, [firebaseAuth, navigate]);
 
   useEffect(() => {
-    const fetchToken = async () => {
-      await getToken();
+    const refreshToken = async () => {
+      if(user) {
+        const refreshedToken = await user.getIdTokenResult(true);
+        storeToken(refreshedToken.token);
+        navigate('/');
+      }
     }
-    fetchToken();
-  }, [getToken]);
+    refreshToken();
+  }, [storeToken, navigate, user]);
 
   useEffect(() => {
     const fetchUser = async () => {

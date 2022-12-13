@@ -80,6 +80,7 @@ export const useGetUserInfo = () => {
     queryFn: async (): Promise<AppUser> => {
       return fetchApi({
         uri: `${uri}/me`,
+        method: methods.GET,
       });
     },
   });
