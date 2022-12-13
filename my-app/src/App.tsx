@@ -8,7 +8,7 @@ import { useRoutes } from "react-router-dom";
 import { routes } from "./router";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { AuthenticationProvider } from "./contexts";
+import { AuthenticationProvider, Web3Provider } from "./contexts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const App = () => {
@@ -20,7 +20,9 @@ export const App = () => {
       <QueryClientProvider client={queryClient}>
         <Box textAlign="center" fontSize="xl">
           <AuthenticationProvider>
-            <Suspense>{elements}</Suspense>
+            <Web3Provider>
+              <Suspense>{elements}</Suspense>
+            </Web3Provider>
           </AuthenticationProvider>
         </Box>
       </QueryClientProvider>
