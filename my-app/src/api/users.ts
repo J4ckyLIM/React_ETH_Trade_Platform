@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuthentication } from '../hooks';
 import { AppUser, UserWallet } from '../types/types';
 import { fetchApi, methods } from './fetchApi';
 
@@ -75,8 +76,9 @@ export const useCreateWallet = () => {
 }
 
 export const useGetUserInfo = () => {
+  const { token } = useAuthentication();
   const query = useQuery<AppUser, Error>({
-    queryKey: [uri],
+    queryKey: [uri, token],
     queryFn: async (): Promise<AppUser> => {
       return fetchApi({
         uri: `${uri}/me`,
@@ -84,5 +86,5 @@ export const useGetUserInfo = () => {
       });
     },
   });
-  return { ...query, userInfo: query.data };
+  return { ...query, userInfo: query.data?.user };
 }

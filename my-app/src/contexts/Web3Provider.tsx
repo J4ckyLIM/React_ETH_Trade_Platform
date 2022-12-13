@@ -1,4 +1,5 @@
-import { createContext, useMemo, useState } from "react"
+import { createContext, useEffect, useMemo, useState } from "react"
+import { useGetUserInfo } from "../api/users";
 
 import { UserWallet } from "../types/types";
 
@@ -14,11 +15,18 @@ export const Web3Context = createContext<Web3Config>({
 
 export const Web3Provider = ({ children }: { children: any }) => {
   const [wallet, setWallet] = useState<UserWallet | null>(null);
+  const { userInfo } = useGetUserInfo();
+
+  useEffect(() => {
+    if(userInfo) {
+      setWallet(userInfo.wallet);
+    }
+  }, [setWallet, userInfo])
 
   const contextValues = useMemo(() => {
     return {
       wallet,
-      setWallet
+      setWallet,
     };
   }, [wallet]);
 
