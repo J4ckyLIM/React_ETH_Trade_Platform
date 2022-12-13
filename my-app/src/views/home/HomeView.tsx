@@ -1,7 +1,8 @@
-import { Button, Text, VStack } from "@chakra-ui/react"
-import { FC, useCallback, useEffect } from "react"
+import { Box, Button, Text, VStack } from "@chakra-ui/react"
+import { FC, useCallback } from "react"
 import { toast } from "react-toastify"
-import { useCreateWallet, useGetUserInfo } from "../../api/users"
+import { useCreateWallet } from "../../api/users"
+import { UserInfoCard } from "../../components/card/UserInfoCard"
 import { Page } from "../../components/layouts/Page/Page"
 import { useAuthentication } from "../../hooks"
 import { useWeb3 } from "../../hooks/useWeb3"
@@ -10,15 +11,7 @@ import { UserWallet } from "../../types/types"
 export const HomeView: FC = () => {
   const { createWallet } = useCreateWallet();
   const { user } = useAuthentication();
-  const { setWallet } = useWeb3();
-
-  const { userInfo } = useGetUserInfo();
-
-  useEffect(() => {
-    if(userInfo?.wallet) {
-      setWallet(userInfo.wallet);
-    }
-  }, [userInfo, setWallet])
+  const { wallet, setWallet } = useWeb3();
 
   const handleOnSuccessWalletCreation = useCallback((wallet: UserWallet) => {
     setWallet(wallet);
@@ -35,7 +28,11 @@ export const HomeView: FC = () => {
     <Page title="Home">
       <VStack>
         <Text>In order to use our services you must create a wallet.</Text>
-        <Button onClick={handleOnClickCreateWallet}>Create wallet</Button>
+        {wallet ? (
+          <Box pt={10}>
+            <UserInfoCard wallet={wallet} />
+          </Box>
+        ) : (<Button onClick={handleOnClickCreateWallet}>Create wallet</Button>)}
       </VStack>
     </Page>
   )
