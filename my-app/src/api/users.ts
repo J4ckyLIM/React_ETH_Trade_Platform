@@ -1,4 +1,5 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuthentication } from '../hooks';
 import { UserWallet } from '../types/types';
 import { fetchApi, methods } from './fetchApi';
 
@@ -72,4 +73,28 @@ export const useCreateWallet = () => {
   });
 
   return { ...mutation, createWallet: mutation.mutate };
+}
+
+export const useGetWallet = () => {
+  const { user } = useAuthentication();
+
+  if (!user) {
+    throw new Error('User is missing');
+  }
+
+  const newUri = `${uri}/${user.uid}/wallet`;
+  const query = useQuery<{ wallet: UserWallet}, Error>({
+    queryKey: [uri, user],
+    queryFn: async (): Promise<{ wallet: UserWallet}> =>
+      fetchApi({
+        uri: newUri,
+      }),
+  });
+
+  const wallet = query.data?.wallet;
+
+  return {
+    ...query,
+    wallet,
+  };
 }
