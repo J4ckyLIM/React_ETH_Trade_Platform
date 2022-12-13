@@ -28,11 +28,11 @@ export class UserController extends BaseController {
     }
   }
 
-  async getWallet(req: AuthenticatedRequest, res: Response) {
-    const { userId } = req.params;
+  async getUser(req: AuthenticatedRequest, res: Response) {
+    const authId = req.authId;
     try {
-      const wallet = await this.serviceRegistry.userService.getWalletFromUser(userId);
-      res.status(200).json({ wallet });
+      const user = await this.serviceRegistry.userService.getUserInfo(authId);
+      res.status(200).json({ user });
     } catch (e: any) {
       res.status(400).json({ error: e.message });
     }
@@ -42,7 +42,7 @@ export class UserController extends BaseController {
     const router = Router();
     router.post('/new', this.createUser.bind(this));
     router.post('/:userId/wallet/new', checkIfAuthenticated, this.createWallet.bind(this));
-    router.get('/:userId/wallet', checkIfAuthenticated, this.getWallet.bind(this));
+    router.get('/me', checkIfAuthenticated, this.getUser.bind(this));
     return router;
   }
 }
