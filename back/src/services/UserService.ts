@@ -43,14 +43,11 @@ export class UserService extends BaseService {
     }
   }
 
-  public getWalletFromUser = async (userId: string): Promise<{ address: string, privateKey: string }> => {
+  public getUserInfo = async (userId: string): Promise<{ address: string, privateKey: string }> => {
     const user = await this.app.firestore().collection("users").doc(userId).get();
 
     if(user.data() && user.data()?.wallet) {
-      return {
-        address: user.data().wallet.address,
-        privateKey: user.data().wallet.privateKey,
-      }
+      return user.data();
     } else {
       throw new Error("User does not have a wallet");
     }
