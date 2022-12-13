@@ -4,5 +4,7 @@ export type UserWallet = {
 }
 
 export type AppUser = {
-  wallet: UserWallet;
+  user: {
+    wallet: UserWallet;
+  };
 }
