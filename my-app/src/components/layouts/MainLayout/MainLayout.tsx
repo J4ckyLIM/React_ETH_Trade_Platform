@@ -1,6 +1,6 @@
 import { useDisclosure, useColorModeValue, Drawer, DrawerContent, Box } from "@chakra-ui/react";
 import { FC, ReactNode } from "react";
-import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings } from "react-icons/fi";
+import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings, FiBarChart } from "react-icons/fi";
 import { Outlet } from "react-router-dom";
 import { LinkItemProps, SidebarContent } from "../Navigation/SideBarContent";
 
@@ -10,6 +10,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Explore', icon: FiCompass },
   { name: 'Favorites', icon: FiStar },
   { name: 'Settings', icon: FiSettings },
+  { name: 'Chat', icon: FiBarChart },
 ];
 
 interface MainLayoutProps {
