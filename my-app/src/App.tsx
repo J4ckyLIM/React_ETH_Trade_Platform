@@ -1,38 +1,43 @@
-import * as React from "react"
 import {
   ChakraProvider,
   Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
   theme,
 } from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+import { Suspense } from "react";
+import { useRoutes } from "react-router-dom";
+import { routes } from "./router";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AuthenticationProvider, Web3Provider } from "./contexts";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
-  </ChakraProvider>
-)
+export const App = () => {
+  const elements = useRoutes(routes);
+  const queryClient = new QueryClient();
+
+  return (
+    <ChakraProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <Box textAlign="center" fontSize="xl">
+          <AuthenticationProvider>
+            <Web3Provider>
+              <Suspense>{elements}</Suspense>
+            </Web3Provider>
+          </AuthenticationProvider>
+        </Box>
+      </QueryClientProvider>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </ChakraProvider>
+  )
+}
