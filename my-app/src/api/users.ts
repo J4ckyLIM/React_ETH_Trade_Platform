@@ -46,7 +46,7 @@ export const useCreateUser = () => {
       }
     }
   });
-
+  
   return { ...mutation, createUser: mutation.mutate };
 };
 
